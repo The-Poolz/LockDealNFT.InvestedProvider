@@ -22,4 +22,5 @@ interface IInvestedProvider is IProvider {
     function onInvest(uint256 poolId, uint256 amount) external;
 
     error NotInvestProvider();
+    error InvestProviderZeroAddress();
 }

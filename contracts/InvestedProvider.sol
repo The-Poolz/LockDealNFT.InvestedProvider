@@ -5,8 +5,11 @@ import "./InvestedModifiers.sol";
 
 contract InvestedProvider is InvestedModifiers {
     constructor(
-        ILockDealNFT _lockDealNFT
+        ILockDealNFT _lockDealNFT,
+        address _investProvider
     ) DispenserProvider(_lockDealNFT) {
+        if (_investProvider == address(0)) revert InvestProviderZeroAddress();
+        investProvider = _investProvider;
         name = "InvestedProvider";
     }
 
@@ -23,6 +26,6 @@ contract InvestedProvider is InvestedModifiers {
         uint256 amount
     ) external override onlyInvestProvider {
         poolIdToAmount[poolId] += amount;
-        // emit UpdateParams(poolId, params); 
+        // emit UpdateParams(poolId, params);
     }
 }
