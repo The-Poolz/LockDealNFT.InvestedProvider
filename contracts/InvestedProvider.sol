@@ -6,7 +6,7 @@ import "./InvestedModifiers.sol";
 contract InvestedProvider is InvestedModifiers {
     constructor(
         ILockDealNFT _lockDealNFT
-    ) DispenserProvider(_lockDealNFT) Ownable(msg.sender) {
+    ) DispenserProvider(_lockDealNFT) {
         name = "InvestedProvider";
     }
 
