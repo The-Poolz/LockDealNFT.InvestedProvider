@@ -8,9 +8,9 @@ import "@ironblocks/firewall-consumer/contracts/FirewallConsumer.sol";
 /// @notice This is a contract as a marker of the invested amount.
 /// Don't use it for transfering the invested amount. It's just for showing the ownership of the invested amount
 contract InvestedProvider is InvestedModifiers, FirewallConsumer {
-    constructor(ILockDealNFT lockDealNFT) {
-        if (address(lockDealNFT) == address(0)) revert ZeroAddress();
-        lockDealNFT = lockDealNFT;
+    constructor(ILockDealNFT _lockDealNFT) {
+        if (address(_lockDealNFT) == address(0)) revert ZeroAddress();
+        lockDealNFT = _lockDealNFT;
         name = "InvestedProvider";
     }
 
@@ -38,6 +38,8 @@ contract InvestedProvider is InvestedModifiers, FirewallConsumer {
     )
         external
         firewallProtected
+        onlyProvider
+        validProvider(poolId)
         validParamsLength(params.length, currentParamsTargetLength())
     {
         poolIdToAmount[poolId] = params[0];
