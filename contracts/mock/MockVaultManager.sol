@@ -21,10 +21,6 @@ contract MockVaultManager {
         tokenToVaultId[_tokenAddress] = vaultId;
     }
 
-    function withdrawByVaultId(uint _vaultId, address _to, uint _amount) external {
-        IERC20(vaultIdtoToken[_vaultId]).transfer(_to, _amount);
-    }
-
     function vaultIdToTokenAddress(uint _vaultId) external view returns (address) {
         return vaultIdtoToken[_vaultId];
     }

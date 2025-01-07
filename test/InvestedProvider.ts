@@ -108,4 +108,12 @@ describe("InvestedProvider tests", function () {
             mockInvestProvider.callRegister(await investedProvider.getAddress(), params, sourcePoolId)
         ).to.be.revertedWithCustomError(investedProvider, "InvalidProviderPoolId")
     })
+
+    it("should revert zero address lockDealNFT", async () => {
+        const InvestedProvider = await ethers.getContractFactory("InvestedProvider")
+        await expect(InvestedProvider.deploy(ethers.ZeroAddress)).to.be.revertedWithCustomError(
+            investedProvider,
+            "ZeroAddress"
+        )
+    })
 })
