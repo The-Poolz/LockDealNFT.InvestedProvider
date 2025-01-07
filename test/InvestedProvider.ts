@@ -82,4 +82,9 @@ describe("InvestedProvider tests", function () {
             "split is not allowed for invested provider"
         )
     })
+
+    it("should return amount from getParams", async () => {
+        await mockInvestProvider.createInvestedPool(await investedProvider.getAddress(), amount, sourcePoolId)
+        expect((await investedProvider.getParams(poolId)).toString()).to.equal([amount].toString())
+    })
 })

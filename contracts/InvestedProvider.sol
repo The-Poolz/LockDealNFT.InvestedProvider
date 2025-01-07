@@ -35,7 +35,11 @@ contract InvestedProvider is InvestedModifiers, FirewallConsumer {
     function registerPool(
         uint256 poolId,
         uint256[] calldata params
-    ) external firewallProtected {
+    )
+        external
+        firewallProtected
+        validParamsLength(params.length, currentParamsTargetLength())
+    {
         poolIdToAmount[poolId] = params[0];
         emit UpdateParams(poolId, params);
     }
