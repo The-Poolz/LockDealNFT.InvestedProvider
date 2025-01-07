@@ -13,7 +13,7 @@ abstract contract InvestedModifiers is DealProviderState, ProviderState {
 
     // Modifier to check if parameters length is valid
     modifier validParamsLength(uint256 paramsLength, uint256 minLength) {
-        if (paramsLength < minLength) {
+        if (paramsLength > minLength) {
             revert InvalidParamsLength(paramsLength, minLength);
         }
         _;
