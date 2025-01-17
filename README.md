@@ -12,6 +12,7 @@
 -   [Installation](#installation)
 -   [Overview](#overview)
 -   [UML](#investprovider-diagram)
+-   [Functions](#functions)
 -   [License](#license)
 
 ## Installation
@@ -52,19 +53,48 @@ npx hardhat run ./scripts/deploy.ts --network truffleDashboard
 
 ## Overview
 
-**The InvestedProvider** contract is designed to track and prove investment participation in **IDOs**. It is not used for transferring invested amounts but for confirming ownership of investments through NFTs. The contract integrates with the LockDealNFT system to manage provider and deal-related states.
+**The InvestedProvider** contract is designed to track and verify investment participation in **IDOs**. It confirms ownership of investments through **NFTs** and integrates with the **LockDealNFT** system to manage provider and deal-related states.
 
 ### Key Features:
 
--   Proof of Investment: Provides an NFT as proof of successful investment.
--   Security Modifiers: Includes checks for valid parameters and provider addresses to ensure secure operation.
--   Firewall Protection: Utilizes firewall protections to prevent unauthorized actions like withdrawals and splits.
--   Provider Registration: Manages the registration of investment pools, associating them with specific investment IDs and amounts
+-   **Proof of Investment:** Provides an **NFT** as proof of successful investment.
+-   **Security Modifiers:** Includes checks for valid parameters and provider addresses to ensure secure operation.
+-   **Firewall Protection:** Utilizes firewall protections to prevent unauthorized actions like withdrawals and splits.
+-   **Provider Registration:** Manages the registration of investment pools, associating them with specific investment IDs and amounts
 
 ## UML
 
 Below is a simplified representation of the contract structure and interactions:
 ![classDiagram](https://github.com/user-attachments/assets/7d7dc24e-e7eb-4901-8dd2-aef6dae191d7)
+
+## Functions
+
+### registerPool
+
+Registers a pool with the given parameters. Only contracts approved by **LockDealNFT** are allowed to call this function.
+
+```solidity
+function registerPool(
+    uint256 poolId,
+    uint256[] calldata params
+) external firewallProtected onlyProvider;
+```
+
+-   **poolId:** The ID of the pool being registered.
+-   **params:** An array containing the parameters for the pool. The first element represents the amount, and the second element represents the investment ID.
+
+### getParams
+
+Retrieves the parameters associated with a specific pool ID.
+
+```solidity
+function getParams(
+    uint256 poolId
+) external view returns (uint256[] memory params);
+```
+
+-   **poolId:** The ID of the pool.
+-   **Returns:** An array containing two elements: the amount associated with the pool and the investment ID.
 
 ## License
 
