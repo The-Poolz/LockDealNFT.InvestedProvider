@@ -16,6 +16,7 @@ describe("InvestedProvider tests", function () {
     let sourcePoolId: bigint
     let params: bigint[]
     const creationSignature: Uint8Array = ethers.toUtf8Bytes("signature")
+    const investPoolId = 58n
 
     before(async () => {
         accounts = await ethers.getSigners()
@@ -37,7 +38,7 @@ describe("InvestedProvider tests", function () {
         // create source pool
         await token.approve(await vaultManager.getAddress(), amount)
         sourcePoolId = await lockDealNFT.totalSupply()
-        params = [amount]
+        params = [amount, investPoolId]
         const addresses = [await accounts[0].getAddress(), await token.getAddress()]
         await mockInvestProvider.createNewPool(addresses, params, creationSignature)
     })
@@ -67,9 +68,20 @@ describe("InvestedProvider tests", function () {
         expect(await investedProvider.poolIdToAmount(poolId)).to.equal(amount)
     })
 
+    it("should save invest pool id after invest", async () => {
+        await mockInvestProvider.createInvestedPool(await investedProvider.getAddress(), params, sourcePoolId)
+        expect(await investedProvider.poolIdToInvestId(poolId)).to.equal(investPoolId)
+    })
+
     it("should return 0 when call getWithdrawableAmount", async () => {
         await mockInvestProvider.createInvestedPool(await investedProvider.getAddress(), params, sourcePoolId)
         expect(await investedProvider.getWithdrawableAmount(poolId)).to.equal(0)
+    })
+
+    it("should emit UpdateParams event", async () => {
+        await expect(mockInvestProvider.createInvestedPool(await investedProvider.getAddress(), params, sourcePoolId))
+            .to.emit(investedProvider, "UpdateParams")
+            .withArgs(poolId, params)
     })
 
     it("should revert withdraw call", async () => {
@@ -86,7 +98,7 @@ describe("InvestedProvider tests", function () {
 
     it("should return amount from getParams", async () => {
         await mockInvestProvider.createInvestedPool(await investedProvider.getAddress(), params, sourcePoolId)
-        expect((await investedProvider.getParams(poolId)).toString()).to.equal([amount].toString())
+        expect((await investedProvider.getParams(poolId)).toString()).to.equal([amount, investPoolId].toString())
     })
 
     it("should revert if caller is not approved", async () => {
@@ -96,14 +108,14 @@ describe("InvestedProvider tests", function () {
         )
     })
 
-    it("should invalid params length on register", async () => {
-        const params = [amount, amount]
+    it("should revert invalid params length on register", async () => {
+        const params = [amount, amount, amount]
         await expect(
             mockInvestProvider.createInvestedPool(await investedProvider.getAddress(), params, sourcePoolId)
         ).to.be.revertedWithCustomError(investedProvider, "InvalidParamsLength")
     })
 
-    it("should invalid params length on register", async () => {
+    it("should revert invalid provider pool id", async () => {
         await expect(
             mockInvestProvider.callRegister(await investedProvider.getAddress(), params, sourcePoolId)
         ).to.be.revertedWithCustomError(investedProvider, "InvalidProviderPoolId")
