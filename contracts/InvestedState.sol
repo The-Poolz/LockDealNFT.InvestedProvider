@@ -4,7 +4,6 @@ pragma solidity ^0.8.0;
 import "@poolzfinance/lockdeal-nft/contracts/SimpleProviders/Provider/ProviderState.sol";
 import "@poolzfinance/lockdeal-nft/contracts/SimpleProviders/DealProvider/DealProviderState.sol";
 
-
 /// @title InvestedState
 abstract contract InvestedState is ProviderState, DealProviderState {
     /// @notice Mapping of poolId to investId
