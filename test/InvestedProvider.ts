@@ -78,6 +78,12 @@ describe("InvestedProvider tests", function () {
         expect(await investedProvider.getWithdrawableAmount(poolId)).to.equal(0)
     })
 
+    it("should emit UpdateParams event", async () => {
+        await expect(mockInvestProvider.createInvestedPool(await investedProvider.getAddress(), params, sourcePoolId))
+            .to.emit(investedProvider, "UpdateParams")
+            .withArgs(poolId, params)
+    })
+
     it("should revert withdraw call", async () => {
         await expect(investedProvider.withdraw(amount)).to.be.revertedWith(
             "withdraw is not allowed for invested provider"
