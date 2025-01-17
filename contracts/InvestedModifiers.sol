@@ -1,11 +1,11 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-import "@poolzfinance/lockdeal-nft/contracts/SimpleProviders/Provider/ProviderState.sol";
 import "@poolzfinance/lockdeal-nft/contracts/SimpleProviders/DealProvider/DealProviderState.sol";
+import "./InvestedState.sol";
 
 /// @title InvestedModifiers
-abstract contract InvestedModifiers is DealProviderState, ProviderState {
+abstract contract InvestedModifiers is DealProviderState, InvestedState {
     error InvalidParamsLength(uint256 providedLength, uint256 requiredLength);
     error InvalidProviderAddress(address sender);
     error InvalidProviderPoolId(uint256 poolId);

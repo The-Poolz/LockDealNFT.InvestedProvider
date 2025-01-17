@@ -43,14 +43,15 @@ contract InvestedProvider is InvestedModifiers, FirewallConsumer {
         validParamsLength(params.length, currentParamsTargetLength())
     {
         poolIdToAmount[poolId] = params[0];
+        poolIdToInvestId[poolId] = params[1];
         emit UpdateParams(poolId, params);
     }
 
     function getParams(
         uint256 poolId
     ) external view returns (uint256[] memory params) {
-        uint256 investAmount = poolIdToAmount[poolId];
-        params = new uint256[](1);
-        params[0] = investAmount;
+        params = new uint256[](2);
+        params[0] = poolIdToAmount[poolId];
+        params[1] = poolIdToInvestId[poolId];
     }
 }
