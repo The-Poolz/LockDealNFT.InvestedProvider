@@ -1,9 +1,10 @@
-import { MockInvestProvider, InvestedProvider, MockVaultManager } from "../typechain-types"
+import { MockInvestProvider, InvestedProvider } from "../typechain-types"
 import { expect } from "chai"
 import { ethers } from "hardhat"
 import { SignerWithAddress } from "@nomicfoundation/hardhat-ethers/signers"
 import { LockDealNFT } from "../typechain-types/@poolzfinance/lockdeal-nft/contracts/LockDealNFT/LockDealNFT"
 import { ERC20Token } from "../typechain-types/contracts/mock/ERC20Token"
+import { BaseContract } from "ethers"
 
 describe("InvestedProvider tests", function () {
     let accounts: SignerWithAddress[]
@@ -23,11 +24,11 @@ describe("InvestedProvider tests", function () {
         const Token = await ethers.getContractFactory("ERC20Token")
         token = (await Token.deploy("TEST", "test")) as ERC20Token
         const VaultManager = await ethers.getContractFactory("MockVaultManager")
-        const vaultManager = (await VaultManager.deploy()) as any as MockVaultManager
+        const vaultManager = await VaultManager.deploy()
         const LockDealNFT = await ethers.getContractFactory("LockDealNFT")
-        lockDealNFT = (await LockDealNFT.deploy(await vaultManager.getAddress(), "")) as any as LockDealNFT
+        lockDealNFT = await LockDealNFT.deploy(await vaultManager.getAddress(), "") as BaseContract as LockDealNFT
         const InvestedProvider = await ethers.getContractFactory("InvestedProvider")
-        investedProvider = (await InvestedProvider.deploy(await lockDealNFT.getAddress())) as any as InvestedProvider
+        investedProvider = await InvestedProvider.deploy(await lockDealNFT.getAddress()) as BaseContract as InvestedProvider
         const MockInvestProvider = await ethers.getContractFactory("MockInvestProvider")
         mockInvestProvider = (await MockInvestProvider.deploy(
             await lockDealNFT.getAddress()
