@@ -14,7 +14,6 @@ describe("InvestedProvider tests", function () {
     let lockDealNFT: LockDealNFT
     let poolId: bigint
     let sourcePoolId: bigint
-    let params: bigint[]
     const creationSignature: Uint8Array = ethers.toUtf8Bytes("signature")
 
     before(async () => {
@@ -37,7 +36,6 @@ describe("InvestedProvider tests", function () {
         await lockDealNFT.setApprovedContract(await mockInvestProvider.getAddress(), true)
         await lockDealNFT.setApprovedContract(await investedProvider.getAddress(), true)
         sourcePoolId = await lockDealNFT.totalSupply()
-        params = []
         await token.approve(await vaultManager.getAddress(), ethers.parseEther("1"))
         const addresses = [await accounts[0].getAddress(), await token.getAddress()]
         await mockInvestProvider.createNewPool(addresses, [ethers.parseEther("1")], creationSignature)
@@ -101,5 +99,25 @@ describe("InvestedProvider tests", function () {
 
     it("currentParamsTargetLength should return 0", async () => {
         expect(await investedProvider.currentParamsTargetLength()).to.equal(0)
+    })
+
+    it("should revert NFT transfers", async () => {
+        await mockInvestProvider.createInvestedPool(await investedProvider.getAddress(), sourcePoolId)
+        await lockDealNFT.approvePoolTransfers(true)
+        await expect(
+            lockDealNFT["safeTransferFrom(address,address,uint256)"](
+                await accounts[0].getAddress(),
+                await accounts[1].getAddress(),
+                poolId
+            )
+        ).to.be.revertedWith("transfer is not allowed for invested provider")
+    })
+
+    it("should support IERC165 interface", async () => {
+        expect(await investedProvider.supportsInterface("0x01ffc9a7")).to.equal(true)
+    })
+
+    it("should support IBeforeTransfer interface", async () => {
+        expect(await investedProvider.supportsInterface("0x1ffb811f")).to.equal(true)
     })
 })

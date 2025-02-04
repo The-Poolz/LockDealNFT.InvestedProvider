@@ -44,4 +44,12 @@ contract InvestedProvider is InvestedState, FirewallConsumer {
     function getParams(
         uint256
     ) external pure returns (uint256[] memory params) {}
+
+    function beforeTransfer(
+        address,
+        address,
+        uint256
+    ) external override firewallProtected {
+        revert("transfer is not allowed for invested provider");
+    }
 }
