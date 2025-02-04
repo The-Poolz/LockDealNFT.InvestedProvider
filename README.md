@@ -58,9 +58,7 @@ npx hardhat run ./scripts/deploy.ts --network truffleDashboard
 ### Key Features:
 
 -   **Proof of Investment:** Provides an **NFT** as proof of successful investment.
--   **Security Modifiers:** Includes checks for valid parameters and provider addresses to ensure secure operation.
 -   **Firewall Protection:** Utilizes firewall protections to prevent unauthorized actions like withdrawals and splits.
--   **Provider Registration:** Manages the registration of investment pools, associating them with specific investment IDs and amounts
 
 ## UML
 
@@ -71,30 +69,11 @@ Below is a simplified representation of the contract structure and interactions:
 
 ### registerPool
 
-Registers a pool with the given parameters. Only contracts approved by **LockDealNFT** are allowed to call this function.
-
-```solidity
-function registerPool(
-    uint256 poolId,
-    uint256[] calldata params
-) external firewallProtected onlyProvider;
-```
-
--   **poolId:** The ID of the pool being registered.
--   **params:** An array containing the parameters for the pool. The first element represents the amount, and the second element represents the investment ID.
+**InvestedProvider** does not support data registration. The number of **InvestedProvider** parameters is always zero.
 
 ### getParams
 
-Retrieves the parameters associated with a specific pool ID.
-
-```solidity
-function getParams(
-    uint256 poolId
-) external view returns (uint256[] memory params);
-```
-
--   **poolId:** The ID of the pool.
--   **Returns:** An array containing two elements: the amount associated with the pool and the investment ID.
+`getParams` always returns an empty array.
 
 ## License
 
