@@ -98,4 +98,8 @@ describe("InvestedProvider tests", function () {
             "ZeroAddress"
         )
     })
+
+    it("currentParamsTargetLength should return 0", async () => {
+        expect(await investedProvider.currentParamsTargetLength()).to.equal(0)
+    })
 })
