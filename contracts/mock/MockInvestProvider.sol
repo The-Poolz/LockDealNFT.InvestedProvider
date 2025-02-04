@@ -9,13 +9,10 @@ contract MockInvestProvider is DealProvider {
 
     function createInvestedPool(
         IProvider provider,
-        uint256[] calldata params,
         uint256 sourcePoolId
     ) external returns (uint256 poolId) {
         poolId = lockDealNFT.mintForProvider(msg.sender, provider);
         lockDealNFT.cloneVaultId(poolId, sourcePoolId);
-        // register the amount in the invested provider
-        provider.registerPool(poolId, params);
     }
 
     function callRegister(

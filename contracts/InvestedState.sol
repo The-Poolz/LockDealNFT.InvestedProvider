@@ -2,13 +2,9 @@
 pragma solidity ^0.8.0;
 
 import "@poolzfinance/lockdeal-nft/contracts/SimpleProviders/Provider/ProviderState.sol";
-import "@poolzfinance/lockdeal-nft/contracts/SimpleProviders/DealProvider/DealProviderState.sol";
 
 /// @title InvestedState
-abstract contract InvestedState is ProviderState, DealProviderState {
-    /// @notice Mapping of poolId to investId
-    mapping(uint256 => uint256) public poolIdToInvestId;
-
+abstract contract InvestedState is ProviderState {
     ///@dev each provider decides how many parameters needs to be stored
     function currentParamsTargetLength()
         public
@@ -17,6 +13,6 @@ abstract contract InvestedState is ProviderState, DealProviderState {
         override
         returns (uint256)
     {
-        return 2;
+        return 0;
     }
 }
