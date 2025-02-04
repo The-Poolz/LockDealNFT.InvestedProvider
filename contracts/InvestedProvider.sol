@@ -43,8 +43,5 @@ contract InvestedProvider is InvestedState, FirewallConsumer {
 
     function getParams(
         uint256
-    ) external pure returns (uint256[] memory params) {
-        // return empty array
-        return params;
-    }
+    ) external pure returns (uint256[] memory params) {}
 }
